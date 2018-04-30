@@ -22,7 +22,7 @@ namespace Second.IdSrv4
         {
             return new ApiResource[]
             {
-                new ApiResource("api1", "My API #1")
+                new ApiResource("second.api1", "My API #1")
             };
         }
 
@@ -39,7 +39,7 @@ namespace Second.IdSrv4
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     ClientSecrets = { new Secret("BF715316-C9B1-41F2-BFFA-644A2E06CBCA".Sha256()) },
 
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { "second.api1" }
                 },
 
                 // client credentials flow client
@@ -51,7 +51,7 @@ namespace Second.IdSrv4
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
 
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { "second.api1" }
                 },
 
                 // MVC client using hybrid flow
@@ -68,7 +68,24 @@ namespace Second.IdSrv4
                     PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    AllowedScopes = { "openid", "profile", "second.api1" }
+                },
+
+                // MVC client using implicit
+                new Client
+                {
+                    ClientId = "mvc.implicit",
+                    ClientName = "MVC Client Implicit",
+
+                    AllowedGrantTypes = GrantTypes.Implicit,
+
+                    RedirectUris = { "http://localhost:8010/signin-oidc" },
+                    FrontChannelLogoutUri = "http://localhost:8010/signout-oidc",
+                    PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "second.api1" },
+                    AllowAccessTokensViaBrowser = true
                 },
 
                 // SPA client using implicit flow
@@ -89,10 +106,10 @@ namespace Second.IdSrv4
                         "http://localhost:5002/popup.html",
                     },
 
-                    PostLogoutRedirectUris = { "http://localhost:5002/index.html" },
-                    AllowedCorsOrigins = { "http://localhost:5002" },
+                    PostLogoutRedirectUris = { "http://localhost:8010/index.html" },
+                    AllowedCorsOrigins = { "http://localhost:8010" },
 
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    AllowedScopes = { "openid", "profile", "second.api1" }
                 }
             };
         }
