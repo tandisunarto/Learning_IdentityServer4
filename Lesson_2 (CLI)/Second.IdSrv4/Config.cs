@@ -32,7 +32,21 @@ namespace Second.IdSrv4
         {
             return new ApiResource[]
             {
-                new ApiResource("second.api1", "My API #1")
+                new ApiResource("second.api1", "My API #1", 
+                new List<string> {
+                    JwtClaimTypes.Role
+                }),
+
+                // adding api resource this way creates serror
+                // https://github.com/IdentityServer/IdentityServer4/issues/980
+                new ApiResource {
+                    Name = "second.test.api",
+                    DisplayName = "My Second API",
+                    Scopes = new List<Scope>
+                    {
+                        new Scope(JwtClaimTypes.Role)
+                    }
+                }
             };
         }
 
