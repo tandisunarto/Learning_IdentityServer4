@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityModel;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -15,6 +16,15 @@ namespace Second.IdSrv4
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResource
+                {
+                    Name = "second.roles",
+                    DisplayName = "The Roles for the Second IdSrv4",
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Role,
+                    }
+                }
             };
         }
 
@@ -39,7 +49,7 @@ namespace Second.IdSrv4
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     ClientSecrets = { new Secret("BF715316-C9B1-41F2-BFFA-644A2E06CBCA".Sha256()) },
 
-                    AllowedScopes = { "second.api1" }
+                    AllowedScopes = { "openid", "profile", "second.api1", "second.roles" }
                 },
 
                 // client credentials flow client
@@ -68,7 +78,7 @@ namespace Second.IdSrv4
                     PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "second.api1" }
+                    AllowedScopes = { "openid", "profile", "second.api1", "second.roles" },
                 },
 
                 // MVC client using implicit
@@ -84,7 +94,7 @@ namespace Second.IdSrv4
                     PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "second.api1" },
+                    AllowedScopes = { "openid", "profile", "second.api1", "second.roles" },
                     AllowAccessTokensViaBrowser = true
                 },
 

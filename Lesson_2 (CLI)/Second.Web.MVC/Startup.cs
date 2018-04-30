@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -44,6 +45,9 @@ namespace Second.Web.App
                 //options.ClientId = "mvc.implicit";
                 options.ClientId = "mvc";
                 options.ClientSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0";
+
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.Scope.Add("second.roles");
             });
         }
 

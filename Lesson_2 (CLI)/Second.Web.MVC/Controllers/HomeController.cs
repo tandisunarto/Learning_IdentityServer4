@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Second.Web.App.Models;
+using Second.Web.MVC.Models;
 
 namespace Second.Web.App.Controllers
 {
@@ -20,11 +24,27 @@ namespace Second.Web.App.Controllers
         }
 
         [Authorize]
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
             ViewData["Message"] = "Your application description page.";
 
-            return View();
+            var discoveryClient = new DiscoveryClient("http://localhost:8000");
+            var metadataResponse = await discoveryClient.GetAsync();
+
+            var userinfoClient = new UserInfoClient(metadataResponse.UserInfoEndpoint);
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            var response = await userinfoClient.GetAsync(accessToken);
+
+            if (response.IsError)
+            {
+                throw new Exception("Error access UserInfo Endpoint", response.Exception);
+            }
+
+            List<string> roles = response.Claims.Where(c => c.Type == JwtClaimTypes.Role).Select(c => c.Value).ToList();
+
+            return View(new AboutViewModel {
+                Roles = roles
+            });
         }
 
         public IActionResult Contact()
