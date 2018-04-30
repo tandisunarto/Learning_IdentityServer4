@@ -30,6 +30,18 @@ namespace Second.IdSrv4
         {
             return new[]
             {
+                // client credentials resource owner password
+                new Client
+                {
+                    ClientId = "client.ro",
+                    ClientName = "Resource Owner Password Client",
+
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets = { new Secret("BF715316-C9B1-41F2-BFFA-644A2E06CBCA".Sha256()) },
+
+                    AllowedScopes = { "api1" }
+                },
+
                 // client credentials flow client
                 new Client
                 {
