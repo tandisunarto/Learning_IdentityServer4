@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityModel.Client;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Newtonsoft.Json;
 using Second.Web.App.Models;
 using Second.Web.MVC.Models;
 
@@ -54,9 +56,25 @@ namespace Second.Web.App.Controllers
             return View();
         }
 
-        public IActionResult CallAPI()
+        public async Task<IActionResult> CallAPI()
         {
-            return View();
+            HttpClient httpClient = new HttpClient();
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            httpClient.SetBearerToken(accessToken);
+
+            var response = await httpClient.GetAsync("http://localhost:8020/api/values");
+
+            string values = string.Empty;
+            if (response.IsSuccessStatusCode)
+            {
+                values = await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                values = $"[\"{response.ReasonPhrase}\"]";
+            }
+
+            return View(JsonConvert.DeserializeObject<IEnumerable<string>>(values));
         }
 
         public IActionResult Error()

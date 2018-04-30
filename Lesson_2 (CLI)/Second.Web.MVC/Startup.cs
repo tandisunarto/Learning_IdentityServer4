@@ -48,6 +48,7 @@ namespace Second.Web.App
 
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.Scope.Add("second.roles");
+                options.Scope.Add("second.api1");
             });
         }
 

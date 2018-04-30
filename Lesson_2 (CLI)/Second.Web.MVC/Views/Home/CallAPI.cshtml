@@ -1,7 +1,16 @@
-﻿
+﻿@model IEnumerable<string>
+
 @{
     ViewData["Title"] = "CallAPI";
 }
 
 <h2>Call API</h2>
+
+@foreach (var value in Model)
+{
+    <div>
+        <span>value :</span>
+        <strong>@value</strong>
+    </div>
+}
 
