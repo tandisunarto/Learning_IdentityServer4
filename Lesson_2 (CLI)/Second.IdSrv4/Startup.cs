@@ -66,8 +66,14 @@ namespace Second.IdSrv4
                 {
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                    options.ClientId = "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com";
-                    options.ClientSecret = "wdfPY6t8H8cecgjlxud__4Gh";
+                    options.ClientId = "714407290460-atfjn7hr1okqa2k2873tl8brr4k4jps9.apps.googleusercontent.com";
+                    options.ClientSecret = "P4QV9JsWcMN5Wc3jebIW-Sn0";
+                })
+                .AddFacebook(options => {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+                    options.AppId = "2314110895300455";
+                    options.AppSecret = "a7fe406ce2596c001e2ff1ac8a93f2f6";
                 });
         }
 
