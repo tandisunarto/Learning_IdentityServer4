@@ -1,0 +1,24 @@
+@model LoginViewModel
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel-body">
+            <form asp-route="Login">
+                <fieldset>
+                    <div class="form-group">
+                        <label asp-for="Username"></label>
+                        <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" name="button" value="login">Login</button>
+                        <button class="btn btn-default" name="button" value="cancel">Cancel</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

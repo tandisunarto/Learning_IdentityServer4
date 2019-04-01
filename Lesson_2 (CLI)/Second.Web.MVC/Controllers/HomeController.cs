@@ -168,7 +168,7 @@ namespace Second.Web.App.Controllers
         {
             return SignOut(new AuthenticationProperties
             {
-                RedirectUri = "/Home/Index"
+                // RedirectUri = "/Home/Contact"
             }, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }
     }
