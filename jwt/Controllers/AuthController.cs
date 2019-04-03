@@ -28,6 +28,7 @@ namespace jwt.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            // username: tandi@live.com password: Password!1            
             var user = await _userManager.FindByNameAsync(model.Username);     
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -36,10 +37,11 @@ namespace jwt.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-                var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuperSecretKey"));
+                // key must be at least 16 chars for SHA256
+                var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySuperSecretKey"));
 
                 var token = new JwtSecurityToken(
-                    issuer: "http://cortana.com",
+                    issuer: "http://halo.world.com",
                     audience: "http://halo.world.com",
                     expires: DateTime.UtcNow.AddHours(1),
                     claims: claims,
