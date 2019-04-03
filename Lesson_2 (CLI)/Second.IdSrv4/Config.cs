@@ -37,11 +37,16 @@ namespace Second.IdSrv4
                     JwtClaimTypes.Role
                 }),
 
+                new ApiResource("second.new.api1", "My New API #1", 
+                new List<string> {
+                    JwtClaimTypes.Role
+                }),
+
                 // adding api resource this way creates serror
                 // https://github.com/IdentityServer/IdentityServer4/issues/980
                 new ApiResource {
                     Name = "second.test.api",
-                    DisplayName = "My Second API",
+                    DisplayName = "My Second Test API",
                     Scopes = new List<Scope>
                     {
                         new Scope(JwtClaimTypes.Role)
@@ -92,7 +97,7 @@ namespace Second.IdSrv4
                     PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "second.api1", "second.roles" },
+                    AllowedScopes = { "openid", "profile", "second.api1", "second.new.api1", "second.roles", "second.test.api" },
                 },
 
                 // MVC client using implicit

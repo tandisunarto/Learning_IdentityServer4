@@ -31,7 +31,7 @@ namespace Second.Web.Api
                     options.Authority = "http://localhost:8000";
                     options.RequireHttpsMetadata = false;
 
-                    options.ApiName = "second.api1";
+                    options.ApiName = "second.new.api1";
                 });
         }
 
