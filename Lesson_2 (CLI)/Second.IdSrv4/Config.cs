@@ -103,10 +103,11 @@ namespace Second.IdSrv4
                 // MVC client using implicit
                 new Client
                 {
-                    ClientId = "mvc.implicit",
-                    ClientName = "MVC Client Implicit",
+                    ClientId = "mvc.password",
+                    ClientName = "MVC Resource Owner Password",
+                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
                     RedirectUris = { "http://localhost:8010/signin-oidc" },
                     FrontChannelLogoutUri = "http://localhost:8010/signout-oidc",

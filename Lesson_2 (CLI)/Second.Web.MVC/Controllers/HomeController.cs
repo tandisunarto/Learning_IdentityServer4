@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using Second.Web.App.Models;
@@ -19,6 +20,15 @@ using Second.Web.MVC.Models;
 
 namespace Second.Web.App.Controllers
 {
+    public class MyAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
+    {
+        public void OnAuthorization(AuthorizationFilterContext context)
+        {
+            //throw new NotImplementedException();
+            var user = context.HttpContext.User;
+        }
+    }
+
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -26,9 +36,10 @@ namespace Second.Web.App.Controllers
             return View();
         }
 
-        [Authorize]
+        [MyAuthorize(Roles = "Superman")]
         public async Task<IActionResult> About()
         {
+
             ViewData["Message"] = "Your application description page.";
 
             var discoveryClient = new DiscoveryClient("http://localhost:8000");

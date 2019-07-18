@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Second.Web.App
 {
@@ -29,6 +32,11 @@ namespace Second.Web.App
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            services.AddAuthorization(configure => {
+                configure.AddPolicy("Canadian",
+                policy => policy.RequireClaim(ClaimTypes.Country));
+            });
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;  // "Cookies"
@@ -42,7 +50,6 @@ namespace Second.Web.App
                 options.RequireHttpsMetadata = false;
                 options.ResponseType = "id_token code";
                 options.SaveTokens = true;
-                //options.ClientId = "mvc.implicit";
                 options.ClientId = "mvc";
                 options.ClientSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0";
                 options.SignedOutRedirectUri = "http://localhost:8010";
@@ -51,6 +58,34 @@ namespace Second.Web.App
                 options.Scope.Add("second.roles");
                 options.Scope.Add("second.new.api1");
                 options.Scope.Add("offline_access");
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = JwtClaimTypes.Name,
+                    RoleClaimType = JwtClaimTypes.Role
+                };
+
+                options.Events.OnTokenValidated = context =>
+                {
+                    // still does not work
+                    var identity = context.Principal.Identity as ClaimsIdentity;
+                    var claims = identity.Claims;
+                    var ci = new ClaimsIdentity(
+                        context.Principal.Identity.AuthenticationType,
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Role
+                    );
+                    claims = claims.Append(new Claim("role", "Superman"));
+                    ci.AddClaims(claims);
+                    context.HttpContext.User = new ClaimsPrincipal(ci);
+                    return Task.CompletedTask;
+                };
+            });            
+
+            services.AddIdentityServer(options => {
+                options.Events.RaiseSuccessEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseErrorEvents = true;
             });
         }
 
