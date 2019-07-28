@@ -29,7 +29,7 @@ namespace ImageGallery.API
             // appSettings (note: use this during development; in a production environment,
             // it's better to store the connection string in an environment variable)
             var connectionString = Configuration["ConnectionStrings:imageGalleryDBConnectionString"];
-            services.AddDbContext<GalleryContext>(o => o.UseSqlServer(connectionString));
+            services.AddDbContext<GalleryContext>(o => o.UseSqlite(connectionString));
 
             // register the repository
             services.AddScoped<IGalleryRepository, GalleryRepository>();
