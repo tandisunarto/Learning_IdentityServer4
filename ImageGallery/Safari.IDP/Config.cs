@@ -30,7 +30,9 @@ namespace Safari.IDP
 
                         AllowedGrantTypes = GrantTypes.Hybrid,
 
-                        RedirectUris = { "http://localhost:8000/signin-oidc" },
+                        RedirectUris = { 
+                            "http://localhost:8000/signin-oidc" 
+                        },
                         // FrontChannelLogoutUri = "http://localhost:8000/signout-oidc",
                         // PostLogoutRedirectUris = { "http://localhost:8000/signout-callback-oidc" },
 

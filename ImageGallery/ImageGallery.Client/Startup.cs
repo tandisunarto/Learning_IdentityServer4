@@ -1,4 +1,6 @@
 ﻿using ImageGallery.Client.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +31,34 @@ namespace ImageGallery.Client
 
             // register an IImageGalleryHttpClient
             services.AddScoped<IImageGalleryHttpClient, ImageGalleryHttpClient>();
+
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;  // "Cookies"
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;            // "OpenIdConnect"
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddOpenIdConnect(options => {
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.Authority = "http://localhost:8050";
+                options.RequireHttpsMetadata = false;
+                options.ResponseType = "id_token code";
+                options.SaveTokens = true;
+                options.ClientId = "image.gallery";
+                options.ClientSecret = "secret";
+                options.SignedOutRedirectUri = "http://localhost:8000";
+
+                // options.GetClaimsFromUserInfoEndpoint = true;
+                // options.Scope.Add("second.roles");
+                // options.Scope.Add("second.new.api1");
+                // options.Scope.Add("offline_access");
+
+                // options.TokenValidationParameters = new TokenValidationParameters
+                // {
+                //     NameClaimType = JwtClaimTypes.Name,
+                //     RoleClaimType = JwtClaimTypes.Role
+                // };
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +72,8 @@ namespace ImageGallery.Client
             {
                 app.UseExceptionHandler("/Shared/Error");
             }
+
+            app.UseAuthentication();
 
             app.UseStaticFiles();
 
