@@ -2,6 +2,7 @@
 using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -28,7 +29,7 @@ namespace ImageGallery.Client.Controllers
         public async Task<IActionResult> Index()
         {
             await ShowIdToken();
-            
+
             // call the API
             var httpClient = await _imageGalleryHttpClient.GetClient();
 
@@ -166,6 +167,11 @@ namespace ImageGallery.Client.Controllers
             }
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+        }
+
+        public async Task Logout()
+        {            
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         private async Task ShowIdToken()
