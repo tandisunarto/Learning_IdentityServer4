@@ -3,6 +3,7 @@ using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -170,8 +171,9 @@ namespace ImageGallery.Client.Controllers
         }
 
         public async Task Logout()
-        {            
+        {         
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         private async Task ShowIdToken()
@@ -182,7 +184,7 @@ namespace ImageGallery.Client.Controllers
 
             foreach(var claim in User.Claims)
             {
-                System.Diagnostics.Debug.WriteLine($"Claim: {claim}");                
+                System.Diagnostics.Debug.WriteLine($"Claim: {claim}");
             }
         }
     }
