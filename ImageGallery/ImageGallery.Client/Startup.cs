@@ -1,4 +1,6 @@
-﻿using ImageGallery.Client.Services;
+﻿using System.IdentityModel.Tokens.Jwt;
+using ImageGallery.Client.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -17,8 +19,9 @@ namespace ImageGallery.Client
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
- 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -47,7 +50,11 @@ namespace ImageGallery.Client
                 options.ClientSecret = "secret";
                 options.SignedOutRedirectUri = "http://localhost:8000";
 
-                // options.GetClaimsFromUserInfoEndpoint = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.ClaimActions.Remove("amr");         // include amr in the claims
+                options.ClaimActions.DeleteClaim("sid");    // exclude sid from the claims
+                options.ClaimActions.DeleteClaim("idp");    // excllude idp from the claims
+
                 // options.Scope.Add("second.roles");
                 // options.Scope.Add("second.new.api1");
                 // options.Scope.Add("offline_access");
@@ -56,8 +63,7 @@ namespace ImageGallery.Client
                 // {
                 //     NameClaimType = JwtClaimTypes.Name,
                 //     RoleClaimType = JwtClaimTypes.Role
-                // };
-
+                // };                
             });
         }
 
