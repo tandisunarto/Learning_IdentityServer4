@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using IdentityModel;
 using ImageGallery.Client.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ImageGallery.Client
 {
@@ -55,9 +57,12 @@ namespace ImageGallery.Client
                 options.ClaimActions.DeleteClaim("sid");    // exclude sid from the claims
                 options.ClaimActions.DeleteClaim("idp");    // excllude idp from the claims
 
-                options.Scope.Add("marital");
+                options.Scope.Add("employment");
                 options.Scope.Add("address");
+                options.Scope.Add("roles");
 
+                options.ClaimActions.MapUniqueJsonKey("role", "role");
+                options.ClaimActions.MapUniqueJsonKey("start_date", "start_date");
                 // options.Scope.Add("second.roles");
                 // options.Scope.Add("second.new.api1");
                 // options.Scope.Add("offline_access");

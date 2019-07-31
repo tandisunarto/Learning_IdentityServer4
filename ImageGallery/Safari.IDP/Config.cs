@@ -15,12 +15,21 @@ namespace Safari.IDP
                     new IdentityResources.Profile(),
                     new IdentityResources.Address(),
                     new IdentityResource {
-                        Name = "marital",
-                        DisplayName = "User Marital Status",
-                        Description = "Your user marital detail (status, number of kids)",
+                        Name = "roles",
+                        DisplayName = "Your role(s)",
+                        Description = "Role(s) assigned to this user",
                         UserClaims = {
-                            "marital_status",
-                            "number_of_kids"
+                            "role"
+                        }
+                    },
+                    new IdentityResource {
+                        Name = "employment",
+                        DisplayName = "User Employment Status",
+                        Description = "Your user employment detail (status, start_date, title)",
+                        UserClaims = {
+                            "status",
+                            "start_date",
+                            "title"
                         }
                     }
                 };
@@ -54,7 +63,8 @@ namespace Safari.IDP
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
                             IdentityServerConstants.StandardScopes.Address,
-                            "marital"
+                            "employment",
+                            "roles"
                         },
                         // AllowAccessTokensViaBrowser = true
                     },
