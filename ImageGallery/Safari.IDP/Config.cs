@@ -12,7 +12,17 @@ namespace Safari.IDP
             {
                 return new List<IdentityResource> {
                     new IdentityResources.OpenId(),
-                    new IdentityResources.Profile()
+                    new IdentityResources.Profile(),
+                    new IdentityResources.Address(),
+                    new IdentityResource {
+                        Name = "marital",
+                        DisplayName = "User Marital Status",
+                        Description = "Your user marital detail (status, number of kids)",
+                        UserClaims = {
+                            "marital_status",
+                            "number_of_kids"
+                        }
+                    }
                 };
             }
         }
@@ -27,9 +37,7 @@ namespace Safari.IDP
                         ClientId = "image.gallery",
                         ClientName = "Image Gallery",
                         ClientSecrets = { new Secret("secret".Sha256()) },
-
                         AllowedGrantTypes = GrantTypes.Hybrid,
-
                         RedirectUris = 
                         {
                             "http://localhost:8000/signin-oidc" 
@@ -45,6 +53,8 @@ namespace Safari.IDP
                         {  
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
+                            IdentityServerConstants.StandardScopes.Address,
+                            "marital"
                         },
                         // AllowAccessTokensViaBrowser = true
                     },

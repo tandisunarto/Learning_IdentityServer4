@@ -55,6 +55,9 @@ namespace ImageGallery.Client
                 options.ClaimActions.DeleteClaim("sid");    // exclude sid from the claims
                 options.ClaimActions.DeleteClaim("idp");    // excllude idp from the claims
 
+                options.Scope.Add("marital");
+                options.Scope.Add("address");
+
                 // options.Scope.Add("second.roles");
                 // options.Scope.Add("second.new.api1");
                 // options.Scope.Add("offline_access");

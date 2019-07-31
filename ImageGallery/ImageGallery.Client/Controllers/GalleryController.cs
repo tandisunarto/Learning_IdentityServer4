@@ -1,4 +1,5 @@
-﻿using ImageGallery.Client.Services;
+﻿using IdentityModel.Client;
+using ImageGallery.Client.Services;
 using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Authentication;
@@ -174,6 +175,25 @@ namespace ImageGallery.Client.Controllers
         {         
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        public async Task<IActionResult> OrderFrame()
+        {
+            var discoveryClient = new DiscoveryClient("http://localhost:8050");
+            var metadataResponse = await discoveryClient.GetAsync();
+            var userinfoClient = new UserInfoClient(metadataResponse.UserInfoEndpoint);
+
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            var response = await userinfoClient.GetAsync(accessToken);
+
+            if (response.IsError) 
+            {
+                throw new Exception("Error accessing userinfo endpoint", response.Exception);
+            }
+
+            var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;            
+
+            return View(new OrderFrameViewModel(address));
         }
 
         private async Task ShowIdToken()

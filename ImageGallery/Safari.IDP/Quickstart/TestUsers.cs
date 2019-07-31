@@ -25,7 +25,9 @@ namespace IdentityServer4.Quickstart.UI
                     new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
+                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
+                    new Claim("marital_status", "married"),
+                    new Claim("number_of_kids", "3"),
                 }
             },
             new TestUser  {
@@ -40,8 +42,7 @@ namespace IdentityServer4.Quickstart.UI
                     new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                     new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
-                    new Claim("location", "somewhere")
+                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': '1001 Rockville Pike', 'locality': 'Rockville', 'postal_code': 50830, 'country': 'United States' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
                 }
             }
         };
