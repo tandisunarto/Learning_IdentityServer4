@@ -41,7 +41,9 @@ namespace ImageGallery.Client
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;  // "Cookies"
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;            // "OpenIdConnect"
             })
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+                options.AccessDeniedPath = "/Authorization/AccessDenied";
+            })
             .AddOpenIdConnect(options => {
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.Authority = "http://localhost:8050";
@@ -67,11 +69,11 @@ namespace ImageGallery.Client
                 // options.Scope.Add("second.new.api1");
                 // options.Scope.Add("offline_access");
 
-                // options.TokenValidationParameters = new TokenValidationParameters
-                // {
-                //     NameClaimType = JwtClaimTypes.Name,
-                //     RoleClaimType = JwtClaimTypes.Role
-                // };                
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = JwtClaimTypes.Name,
+                    RoleClaimType = JwtClaimTypes.Role
+                };
             });
         }
 

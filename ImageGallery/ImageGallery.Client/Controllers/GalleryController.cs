@@ -177,6 +177,7 @@ namespace ImageGallery.Client.Controllers
             await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
 
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> OrderFrame()
         {
             var discoveryClient = new DiscoveryClient("http://localhost:8050");
