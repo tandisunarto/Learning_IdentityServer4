@@ -15,7 +15,7 @@ namespace Safari.IDP
                 {
                     new ApiResource
                     {
-                        Name = "api",
+                        Name = "imagegallery.api",
                         DisplayName = "Member Image Gallery API",
                         Scopes =
                         {
@@ -28,8 +28,7 @@ namespace Safari.IDP
                                 DisplayName = "Guest Access to the API"
                             }
                         }
-                    },
-                    new ApiResource("imagegallery.api", "Image Gallery API")
+                    }
                 };
             }
         }

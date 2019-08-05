@@ -29,7 +29,8 @@ namespace ImageGallery.API
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme) // "Bearer"
                 .AddIdentityServerAuthentication(options => {
                     options.Authority = "http://localhost:8050";
-                    options.ApiName = "imagegalleryapi";
+                    options.ApiName = "imagegallery.api";
+                    options.RequireHttpsMetadata = false;
                 });
         
             // register the DbContext on the container, getting the connection string from
