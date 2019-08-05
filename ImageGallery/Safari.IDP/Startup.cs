@@ -25,6 +25,7 @@ namespace Safari.IDP
                 .AddDeveloperSigningCredential()
                 .AddTestUsers(TestUsers.Users)
                 .AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddInMemoryApiResources(Config.ApiResources)
                 .AddInMemoryClients(Config.Clients);
         }
 

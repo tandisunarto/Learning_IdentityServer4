@@ -180,6 +180,19 @@ namespace ImageGallery.Client.Controllers
         [Authorize(Roles = "Member")]
         public async Task<IActionResult> OrderFrame()
         {
+            // var httpClient = new HttpClient();
+            // var discoClient = await httpClient.GetDiscoveryDocumentAsync("http://localhost:8050");
+
+            // var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            // {
+            //     Address = discoClient.TokenEndpoint,
+            //     ClientId = "image.gallery",
+            //     ClientSecret = "secret",
+            //     Scope = "openid"
+            // });
+
+            // return View(new OrderFrameViewModel(""));
+
             var discoveryClient = new DiscoveryClient("http://localhost:8050");
             var metadataResponse = await discoveryClient.GetAsync();
             var userinfoClient = new UserInfoClient(metadataResponse.UserInfoEndpoint);

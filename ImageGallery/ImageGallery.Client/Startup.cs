@@ -48,7 +48,7 @@ namespace ImageGallery.Client
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.Authority = "http://localhost:8050";
                 options.RequireHttpsMetadata = false;
-                options.ResponseType = "id_token code";
+                options.ResponseType = "code id_token";
                 options.SaveTokens = true;
                 options.ClientId = "image.gallery";
                 options.ClientSecret = "secret";
@@ -59,9 +59,11 @@ namespace ImageGallery.Client
                 options.ClaimActions.DeleteClaim("sid");    // exclude sid from the claims
                 options.ClaimActions.DeleteClaim("idp");    // excllude idp from the claims
 
-                options.Scope.Add("employment");
                 options.Scope.Add("address");
+                options.Scope.Add("employment");
                 options.Scope.Add("roles");
+                options.Scope.Add("member.imagegallery.api");
+                options.Scope.Add("guest.imagegallery.api");
 
                 options.ClaimActions.MapUniqueJsonKey("role", "role");
                 options.ClaimActions.MapUniqueJsonKey("start_date", "start_date");
