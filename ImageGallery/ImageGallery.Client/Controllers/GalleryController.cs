@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -45,8 +46,9 @@ namespace ImageGallery.Client.Controllers
                     JsonConvert.DeserializeObject<IList<Image>>(imagesAsString).ToList());
 
                 return View(galleryIndexViewModel);
-            }
-
+            } else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                return RedirectToAction("AccessDenied", "Authorization");
+                
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
