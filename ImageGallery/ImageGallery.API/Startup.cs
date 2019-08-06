@@ -29,7 +29,7 @@ namespace ImageGallery.API
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme) // "Bearer"
                 .AddIdentityServerAuthentication(options => {
                     options.Authority = "http://localhost:8050";
-                    options.ApiName = "imagegallery.api";
+                    options.ApiName = "imagegallery.api.roles";
                     options.RequireHttpsMetadata = false;
                 });
         

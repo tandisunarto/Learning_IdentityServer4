@@ -31,8 +31,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Gallery" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Gallery" asp-action="AddImage">Add an image</a></li>
-                    @if (User.IsInRole("Member")) {
+                    @if (User.IsInRole("PayingUser")) {
+                        <li><a asp-area="" asp-controller="Gallery" asp-action="AddImage">Add an image</a></li>
                         <li><a asp-area="" asp-controller="Gallery" asp-action="OrderFrame">Order a framed picture</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
@@ -47,7 +47,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; Image Gallery</p>
+            <p>&copy; Image Gallery</p> 
         </footer>
     </div>
 

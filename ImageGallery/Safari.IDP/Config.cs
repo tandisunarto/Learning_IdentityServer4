@@ -16,19 +16,21 @@ namespace Safari.IDP
                     new ApiResource
                     {
                         Name = "imagegallery.api",
-                        DisplayName = "Member Image Gallery API",
+                        DisplayName = "User Image Gallery API",
                         Scopes =
                         {
                             new Scope {
-                                Name = "member.imagegallery.api",
-                                DisplayName = "Member Access to the API"
+                                Name = "payinguser.imagegallery.api",
+                                DisplayName = "Paying User Access to the API",
                             },
                             new Scope {
-                                Name = "guest.imagegallery.api",
-                                DisplayName = "Guest Access to the API"
+                                Name = "freeuser.imagegallery.api",
+                                DisplayName = "Free User Access to the API",
                             }
                         }
-                    }
+                    },
+                    new ApiResource("imagegallery.api.roles", "Image Gallery API with Roles",
+                        new List<string>() { "role" })
                 };
             }
         }
@@ -93,8 +95,9 @@ namespace Safari.IDP
                             "employment",
                             "roles",
                             "imagegallery.api",
-                            "member.imagegallery.api",
-                            "guest.imagegallery.api"
+                            "payinguser.imagegallery.api",
+                            "freeuser.imagegallery.api",
+                            "imagegallery.api.roles"
                         },
                         // AllowAccessTokensViaBrowser = true
                     },

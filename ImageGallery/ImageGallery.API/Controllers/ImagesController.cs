@@ -42,6 +42,7 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetImage")]
+        // [Authorize("MustOwnImage")]
         public IActionResult GetImage(Guid id)
         {          
             var imageFromRepo = _galleryRepository.GetImage(id);
@@ -57,6 +58,7 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpPost()]
+        [Authorize(Roles = "PayingUser")]
         public IActionResult CreateImage([FromBody] ImageForCreation imageForCreation)
         {
             if (imageForCreation == null)
@@ -96,6 +98,10 @@ namespace ImageGallery.API.Controllers
             // be fixed during the course
             //imageEntity.OwnerId = ...;
 
+            // set the ownerId on the imageEntity
+            var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+            imageEntity.OwnerId = ownerId;
+
             // add and save.  
             _galleryRepository.AddImage(imageEntity);
 
@@ -112,6 +118,7 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        // // [Authorize("MustOwnImage")]
         public IActionResult DeleteImage(Guid id)
         {
             
@@ -133,6 +140,7 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpPut("{id}")]
+        // [Authorize("MustOwnImage")]
         public IActionResult UpdateImage(Guid id, 
             [FromBody] ImageForUpdate imageForUpdate)
         {
@@ -141,7 +149,7 @@ namespace ImageGallery.API.Controllers
             {
                 return BadRequest();
             }
-
+            
             if (!ModelState.IsValid)
             {
                 // return 422 - Unprocessable Entity when validation fails
