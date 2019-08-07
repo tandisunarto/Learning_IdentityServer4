@@ -15,22 +15,26 @@ namespace Safari.IDP
                 {
                     new ApiResource
                     {
-                        Name = "imagegallery.api",
+                        Name = "imagegallery_api",
                         DisplayName = "User Image Gallery API",
                         Scopes =
                         {
                             new Scope {
-                                Name = "payinguser.imagegallery.api",
+                                Name = "payinguser_imagegallery_api",
                                 DisplayName = "Paying User Access to the API",
                             },
                             new Scope {
-                                Name = "freeuser.imagegallery.api",
+                                Name = "freeuser_imagegallery_api",
                                 DisplayName = "Free User Access to the API",
                             }
                         }
                     },
-                    new ApiResource("imagegallery.api.roles", "Image Gallery API with Roles",
-                        new List<string>() { "role" })
+                    new ApiResource(
+                        "imagegallery_api_roles", 
+                        "Image Gallery API with Roles",
+                        new List<string>() { 
+                            "role" 
+                        })
                 };
             }
         }
@@ -60,6 +64,20 @@ namespace Safari.IDP
                             "start_date",
                             "title"
                         }
+                    },
+                    new IdentityResource {
+                        Name = "country",
+                        DisplayName = "The country you are living in",
+                        UserClaims = {
+                            "country"
+                        }
+                    },
+                    new IdentityResource {
+                        Name = "subscription_level",
+                        DisplayName = "Your Subscription Level",
+                        UserClaims = {
+                            "subscription_level"
+                        }
                     }
                 };
             }
@@ -72,7 +90,7 @@ namespace Safari.IDP
                 return new List<Client> {
                     new Client
                     {
-                        ClientId = "image.gallery",
+                        ClientId = "image_gallery",
                         ClientName = "Image Gallery",
                         ClientSecrets = { new Secret("secret".Sha256()) },
                         AllowedGrantTypes = GrantTypes.Hybrid,
@@ -94,16 +112,18 @@ namespace Safari.IDP
                             IdentityServerConstants.StandardScopes.Address,
                             "employment",
                             "roles",
-                            "imagegallery.api",
-                            "payinguser.imagegallery.api",
-                            "freeuser.imagegallery.api",
-                            "imagegallery.api.roles"
+                            // "imagegallery_api",
+                            "payinguser_imagegallery_api",
+                            "freeuser_imagegallery_api",
+                            "imagegallery_api_roles",
+                            "country",
+                            "subscription_level"
                         },
                         // AllowAccessTokensViaBrowser = true
                     },
                     new Client
                     {
-                        ClientId = "image.gallery.ownerpassword",
+                        ClientId = "image_gallery_ownerpassword",
                         ClientName = "Image Gallery",
                         ClientSecrets = { new Secret("secret".Sha256()) },
                         AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
@@ -125,7 +145,7 @@ namespace Safari.IDP
                             IdentityServerConstants.StandardScopes.Address,
                             "employment",
                             "roles",
-                            "imagegallery.api"
+                            "imagegallery_api"
                         },
                         // AllowAccessTokensViaBrowser = true
                     },
