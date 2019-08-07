@@ -75,9 +75,10 @@ namespace ImageGallery.Client
                 options.Scope.Add("roles");
                 options.Scope.Add("payinguser_imagegallery_api");
                 options.Scope.Add("freeuser_imagegallery_api");
-                options.Scope.Add("imagegallery_api_roles");                
+                options.Scope.Add("imagegallery_api_roles");
                 options.Scope.Add("country");
-                options.Scope.Add("subscription_level");                
+                options.Scope.Add("subscription_level");
+                options.Scope.Add("offline_access");
 
                 options.ClaimActions.MapUniqueJsonKey("role", "role");
                 options.ClaimActions.MapUniqueJsonKey("start_date", "start_date");

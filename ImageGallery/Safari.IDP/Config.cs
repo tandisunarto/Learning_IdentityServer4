@@ -94,6 +94,12 @@ namespace Safari.IDP
                         ClientName = "Image Gallery",
                         ClientSecrets = { new Secret("secret".Sha256()) },
                         AllowedGrantTypes = GrantTypes.Hybrid,
+                        AccessTokenLifetime = 120,
+                        AllowOfflineAccess = true,
+                        UpdateAccessTokenClaimsOnRefresh = true,
+                        // IdentityTokenLifetime =
+                        // AuthorizationCodeLifetime
+                        // AbsoluteRefreshTokenLifetime 
                         RedirectUris =
                         {
                             "http://localhost:8000/signin-oidc"
