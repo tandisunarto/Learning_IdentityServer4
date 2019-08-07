@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using System;
@@ -23,10 +24,14 @@ namespace ImageGallery.Client.Controllers
     public class GalleryController : Controller
     {
         private readonly IImageGalleryHttpClient _imageGalleryHttpClient;
+        private readonly IConfiguration _configuration;
 
-        public GalleryController(IImageGalleryHttpClient imageGalleryHttpClient)
+        public GalleryController(
+            IConfiguration configuration,
+            IImageGalleryHttpClient imageGalleryHttpClient)
         {
             _imageGalleryHttpClient = imageGalleryHttpClient;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -48,7 +53,7 @@ namespace ImageGallery.Client.Controllers
                 return View(galleryIndexViewModel);
             } else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 return RedirectToAction("AccessDenied", "Authorization");
-                
+
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
@@ -176,7 +181,40 @@ namespace ImageGallery.Client.Controllers
         }
 
         public async Task Logout()
-        {         
+        {
+            var discoClient = new DiscoveryClient(_configuration["Authority"]);
+            var metadataResponse = await discoClient.GetAsync();
+
+            var recovationClient = new TokenRevocationClient(
+                metadataResponse.RevocationEndpoint,
+                "image_gallery",
+                "secret"
+            );
+
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                var revokeAccessTokenResponse = await recovationClient.RevokeAccessTokenAsync(accessToken);
+
+                if (revokeAccessTokenResponse.IsError)
+                {
+                    throw new Exception("Problem encountered while revoking the access token",
+                        revokeAccessTokenResponse.Exception);
+                }
+            }
+
+            var refreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
+            if (!string.IsNullOrEmpty(refreshToken))
+            {
+                var revokeRefreshTokenResponse = await recovationClient.RevokeRefreshTokenAsync(refreshToken);
+
+                if (revokeRefreshTokenResponse.IsError)
+                {
+                    throw new Exception("Problem encountered while revoking the refresh token",
+                        revokeRefreshTokenResponse.Exception);
+                }
+            }
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
@@ -204,12 +242,12 @@ namespace ImageGallery.Client.Controllers
             var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
             var response = await userinfoClient.GetAsync(accessToken);
 
-            if (response.IsError) 
+            if (response.IsError)
             {
                 throw new Exception("Error accessing userinfo endpoint", response.Exception);
             }
 
-            var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;            
+            var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
 
             return View(new OrderFrameViewModel(address));
         }
