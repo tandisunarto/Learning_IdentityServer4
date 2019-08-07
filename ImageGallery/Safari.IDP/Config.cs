@@ -35,6 +35,9 @@ namespace Safari.IDP
                         new List<string>() { 
                             "role" 
                         })
+                        {
+                            ApiSecrets = { new Secret("apisecret".Sha256()) }   
+                        }
                 };
             }
         }
@@ -92,9 +95,10 @@ namespace Safari.IDP
                     {
                         ClientId = "image_gallery",
                         ClientName = "Image Gallery",
-                        ClientSecrets = { new Secret("secret".Sha256()) },
+                        ClientSecrets = { new Secret("secret".Sha256()) },                        
                         AllowedGrantTypes = GrantTypes.Hybrid,
                         AccessTokenLifetime = 120,
+                        AccessTokenType = AccessTokenType.Reference,
                         AllowOfflineAccess = true,
                         UpdateAccessTokenClaimsOnRefresh = true,
                         // IdentityTokenLifetime =

@@ -46,6 +46,7 @@ namespace ImageGallery.API
                 .AddIdentityServerAuthentication(options => {
                     options.Authority = "http://localhost:8050";
                     options.ApiName = "imagegallery_api_roles";
+                    options.ApiSecret = "apisecret";
                     options.RequireHttpsMetadata = false;
                 });
         
