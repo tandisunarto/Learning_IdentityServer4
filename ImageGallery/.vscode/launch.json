@@ -5,6 +5,27 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "IdentityServer",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/Safari.IDP/bin/Debug/netcoreapp3.0/Safari.IDP.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:8000"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            },
+        },
+        {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",

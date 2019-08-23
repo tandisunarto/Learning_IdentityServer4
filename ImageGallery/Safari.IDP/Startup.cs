@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,13 @@ namespace Safari.IDP
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiResources(Config.ApiResources)
                 .AddInMemoryClients(Config.Clients);
+
+            services.AddAuthentication()
+                .AddFacebook(options => {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.AppId = "753793545079290";
+                    options.AppSecret = "f02b7ba4a987c54981c17bf1556fbe8c";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
