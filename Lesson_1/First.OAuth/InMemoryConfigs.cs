@@ -14,7 +14,7 @@ namespace First.OAuth.Configurations
     {
         internal static IEnumerable<Client> Clients
         {
-            get 
+            get
             {
                 return new List<Client>
                 {
@@ -24,15 +24,19 @@ namespace First.OAuth.Configurations
                         ClientName = "First Web Client Application",
                         AllowedGrantTypes = GrantTypes.Implicit,
                         AllowAccessTokensViaBrowser = true,
-                        RedirectUris = new List<string> { "http://localhost:7001/signin-oidc" },
-                        PostLogoutRedirectUris = new List<string> { "http://localhost:7001" }
-                        // AllowedScopes = new List<string> {
-                        //     IdentityServerConstants.StandardScopes.OpenId,
-                        //     IdentityServerConstants.StandardScopes.Profile,
-                        //     IdentityServerConstants.StandardScopes.Email,
-                        //     "role",
-                        //     "customAPI.read"
-                        // },
+                        RedirectUris = {
+                            "http://localhost:7001/signin-oidc"
+                        },
+                        PostLogoutRedirectUris = {
+                            "http://localhost:7001/signout-callback-oidc"
+                        },
+                        AllowedScopes = {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                            // IdentityServerConstants.StandardScopes.Email,
+                            // "role",
+                            // "customAPI.read"
+                        },
                     },
                     new Client
                     {
@@ -43,9 +47,9 @@ namespace First.OAuth.Configurations
                         AllowedGrantTypes = GrantTypes. ResourceOwnerPasswordAndClientCredentials,
                     //     AllowedScopes = new List<string> {
                     //         // because scope "role" is an identity resource, when calling /connect/token must use grant_type = "password" and provide username and password
-                    //         // if scope only includes "customAPI.read" and "customAPI.write", when calling /connect/token use grant_type = "client_credentials" and no need 
+                    //         // if scope only includes "customAPI.read" and "customAPI.write", when calling /connect/token use grant_type = "client_credentials" and no need
                     //         // to provide username and password
-                    //         "role",             
+                    //         "role",
                     //         "customAPI.read",
                     //         "customAPI.write"
                     //     }
@@ -63,7 +67,7 @@ namespace First.OAuth.Configurations
 
         internal static IEnumerable<ApiResource> APIResources
         {
-            get 
+            get
             {
                 return new List<ApiResource> {
                     new ApiResource
@@ -72,7 +76,7 @@ namespace First.OAuth.Configurations
                         DisplayName = "Custom API",
                         Description = "Custom API Access",
                         // UserClaims = new List<string> { "role" },
-                        // ApiSecrets = new List<Secret> { new Secret("ScopeSecret".Sha256())},                                        
+                        // ApiSecrets = new List<Secret> { new Secret("ScopeSecret".Sha256())},
                         // Scopes = new List<Scope>
                         // {
                         //     new Scope("customAPI.read"),

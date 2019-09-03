@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,16 +22,17 @@ namespace First.Web
             services.AddMvc();
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "cookie";
-                options.DefaultChallengeScheme = "oidc";
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-            .AddCookie("cookie")
-            .AddOpenIdConnect("oidc", options =>
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
-                options.Authority = "http://localhost:6542/";
+                options.Authority = "http://localhost:7000/";
                 options.ClientId = "FirstWeb";
-                options.SignInScheme = "cookie";
+                // options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.RequireHttpsMetadata = false;
+                options.SaveTokens = true;
             });
         }
 

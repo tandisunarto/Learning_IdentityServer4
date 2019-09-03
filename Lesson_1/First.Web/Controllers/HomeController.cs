@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using First.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace First.Web.Controllers
 {
@@ -36,14 +38,24 @@ namespace First.Web.Controllers
         {
             return Challenge(new AuthenticationProperties
             {
-                RedirectUri = "/Home/Index"
-            }, "oidc");
+                RedirectUri = "/Home/Contact"
+            }, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
-        public async Task Logout()
+        public IActionResult Logout()
         {
-            //await HttpContext.Authentication.SignOutAsync("cookie");
-            //await HttpContext.Authentication.SignOutAsync("oidc");
+            return SignOut(new AuthenticationProperties
+            {
+                RedirectUri = "/Home/ThankYou"
+            }, new string[] {
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme
+            });
+        }
+
+        public IActionResult ThankYou()
+        {
+            return View();
         }
 
         public IActionResult Error()
