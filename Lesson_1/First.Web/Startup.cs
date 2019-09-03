@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ namespace First.Web
     {
         public Startup(IConfiguration configuration)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             Configuration = configuration;
         }
 
@@ -30,8 +32,10 @@ namespace First.Web
             {
                 options.Authority = "http://localhost:7000/";
                 options.ClientId = "FirstWeb";
+                options.ResponseType = "id_token token";
                 // options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.RequireHttpsMetadata = false;
+                options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
             });
         }

@@ -38,7 +38,7 @@ namespace First.Web.Controllers
         {
             return Challenge(new AuthenticationProperties
             {
-                RedirectUri = "/Home/Contact"
+                RedirectUri = "/Home/Tokens"
             }, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
@@ -51,6 +51,11 @@ namespace First.Web.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 OpenIdConnectDefaults.AuthenticationScheme
             });
+        }
+
+        public IActionResult Tokens()
+        {
+            return View();
         }
 
         public IActionResult ThankYou()
