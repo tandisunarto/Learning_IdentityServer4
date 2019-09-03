@@ -33,6 +33,7 @@ namespace First.OAuth.Configurations
                         AllowedScopes = {
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
+                            "health_data"
                             // IdentityServerConstants.StandardScopes.Email,
                             // "role",
                             // "customAPI.read"
@@ -57,13 +58,6 @@ namespace First.OAuth.Configurations
                 };
             }
         }
-
-        /*
-          http://localhost:6542/.well-known/openid-configuration
-          "scopes_supported":["openid","profile","email","role","permission","customAPI.read","customAPI.write","offline_access"],
-          "claims_supported":["sub","name","family_name","given_name","middle_name","nickname","preferred_username","profile","picture","website","gender","birthdate",
-                              "zoneinfo","locale","updated_at","email","email_verified","admin","guest","add_users","delete_users","update_users","role"]
-        */
 
         internal static IEnumerable<ApiResource> APIResources
         {
@@ -112,17 +106,16 @@ namespace First.OAuth.Configurations
                     //         "guest"
                     //     }
                     // },
-                    // new IdentityResource
-                    // {
-                    //     Name = "permission",
-                    //     DisplayName = "Your Permission",
-                    //     UserClaims = new List<string>
-                    //     {
-                    //         "add_users",
-                    //         "delete_users",
-                    //         "update_users"
-                    //     }
-                    // }
+                    new IdentityResource
+                    {
+                        Name = "health_data",
+                        DisplayName = "User Personal Health Information",
+                        UserClaims =
+                        {
+                            "smoke",
+                            "alcohol",
+                        }
+                    }
                 };
             }
         }
