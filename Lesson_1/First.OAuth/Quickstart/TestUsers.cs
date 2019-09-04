@@ -53,6 +53,8 @@ namespace IdentityServer4.Quickstart.UI
                             new Claim("smoke", "No"),
                             new Claim("alcohol", "No"),
                             new Claim(JwtClaimTypes.Role, "Guest"),
+                            new Claim(JwtClaimTypes.Role, "Supervisor"),
+                            new Claim(JwtClaimTypes.Role, "HR"),
                         }
                     }
                 };

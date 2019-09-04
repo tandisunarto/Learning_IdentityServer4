@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,7 +45,11 @@ namespace First.Web
 
                 options.ClaimActions.MapUniqueJsonKey("smoke", "smoke");
                 options.ClaimActions.MapUniqueJsonKey("alcohol", "alcohol");
-                options.ClaimActions.MapUniqueJsonKey("role", "role");
+
+                // this causes error when there is more than 1 role                
+                // options.ClaimActions.MapUniqueJsonKey("role", "role");
+                // this is the fix https://github.com/aspnet/Security/pull/1501
+                options.ClaimActions.Add(new JsonKeyClaimAction("role", "role", "role"));
             });
         }
 
