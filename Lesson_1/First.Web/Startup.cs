@@ -39,10 +39,12 @@ namespace First.Web
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
 
+                options.Scope.Add("roles");
                 options.Scope.Add("health_data");
 
                 options.ClaimActions.MapUniqueJsonKey("smoke", "smoke");
                 options.ClaimActions.MapUniqueJsonKey("alcohol", "alcohol");
+                options.ClaimActions.MapUniqueJsonKey("role", "role");
             });
         }
 

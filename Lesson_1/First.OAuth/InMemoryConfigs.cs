@@ -33,9 +33,9 @@ namespace First.OAuth.Configurations
                         AllowedScopes = {
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
-                            "health_data"
+                            "health_data",
+                            "roles"
                             // IdentityServerConstants.StandardScopes.Email,
-                            // "role",
                             // "customAPI.read"
                         },
                     },
@@ -96,16 +96,15 @@ namespace First.OAuth.Configurations
                     new IdentityResources.OpenId(),
                     new IdentityResources.Profile(),
                     // new IdentityResources.Email(),
-                    // new IdentityResource
-                    // {
-                    //     Name = "role",
-                    //     DisplayName = "Your Role Info",
-                    //     UserClaims = new List<string>
-                    //     {
-                    //         "admin",
-                    //         "guest"
-                    //     }
-                    // },
+                    new IdentityResource
+                    {
+                        Name = "roles",
+                        DisplayName = "Your Role Info",
+                        UserClaims = 
+                        {
+                            JwtClaimTypes.Role
+                        }
+                    },
                     new IdentityResource
                     {
                         Name = "health_data",
