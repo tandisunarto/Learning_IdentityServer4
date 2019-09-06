@@ -49,7 +49,10 @@ namespace First.OAuth.Configurations
                 return new List<ApiResource> {
                     new ApiResource(
                         "custom-api",
-                        "Custom API"
+                        "Custom API",
+                        new List<string> { 
+                            JwtClaimTypes.Role
+                        }
                     )
                 };
             }

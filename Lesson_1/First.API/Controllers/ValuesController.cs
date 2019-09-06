@@ -17,7 +17,8 @@ namespace First.API.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return data;
+            var role = User.Claims.FirstOrDefault(c => c.Type == "role").Value;
+            return data.Append(role);
         }
 
         // GET api/values/5
