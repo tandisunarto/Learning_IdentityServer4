@@ -1,5 +1,8 @@
-﻿using ImageGallery.API.Entities;
+﻿using IdentityServer4.AccessTokenValidation;
+using ImageGallery.API.Authorization;
+using ImageGallery.API.Entities;
 using ImageGallery.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,13 +26,35 @@ namespace ImageGallery.API
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-             services.AddMvc();
+            services.AddMvc();
+
+            services.AddAuthorization(authorizationOptions =>
+            {
+                authorizationOptions.AddPolicy(
+                    "MustOwnImage",
+                    policyBuilder =>
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.AddRequirements(
+                                new MustOwnImageRequirement());
+                    });
+            });
+
+            services.AddScoped<IAuthorizationHandler, MustOwnImageHandler>();
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme) // "Bearer"
+                .AddIdentityServerAuthentication(options => {
+                    options.Authority = "http://localhost:8050";
+                    options.ApiName = "imagegallery_api_roles";
+                    options.ApiSecret = "apisecret";
+                    options.RequireHttpsMetadata = false;
+                });
         
             // register the DbContext on the container, getting the connection string from
             // appSettings (note: use this during development; in a production environment,
             // it's better to store the connection string in an environment variable)
-            var connectionString = Configuration["ConnectionStrings:imageGalleryDBConnectionString"];
-            services.AddDbContext<GalleryContext>(o => o.UseSqlServer(connectionString));
+            var connectionString = Configuration["ConnectionStrings:imageGalleryDB"];
+            services.AddDbContext<GalleryContext>(o => o.UseSqlite(connectionString));
 
             // register the repository
             services.AddScoped<IGalleryRepository, GalleryRepository>();
@@ -55,6 +80,8 @@ namespace ImageGallery.API
                     });
                 });
             }
+
+            app.UseAuthentication();
 
             app.UseStaticFiles();
 

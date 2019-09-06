@@ -12,6 +12,7 @@ namespace ImageGallery.Client
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseSetting("https_port", "8001")
                 .UseStartup<Startup>()
                 .Build();
     }

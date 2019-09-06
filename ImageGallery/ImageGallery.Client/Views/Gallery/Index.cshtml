@@ -1,4 +1,5 @@
 ﻿@model ImageGallery.Client.ViewModels.GalleryIndexViewModel
+@inject Microsoft.Extensions.Configuration.IConfiguration configuration
 
 <div class="bottomMarginDefault">
 </div>
@@ -8,7 +9,8 @@
     {
         <div class="pull-left col-md-4">
             <div>
-                <img class="thumbnailImage" src="@("http://localhost:1601/images/" + item.FileName)" />
+                <!-- <img class="thumbnailImage" src="@("http://localhost:1601/images/" + item.FileName)" /> -->
+                <img class="thumbnailImage" src="@(configuration["GalleryAPIUrl"] + "/images/" + item.FileName)" />
             </div>
             <div>
                 <div class="h5">@item.Title</div>
