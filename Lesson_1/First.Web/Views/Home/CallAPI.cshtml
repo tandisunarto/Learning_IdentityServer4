@@ -1,6 +1,16 @@
+@model IEnumerable<WeatherForecast>
+
 @{
     ViewData["Title"] = "Call API";
 }
 <h2>@ViewData["Title"]</h2>
 
-@ViewBag.data)
+@foreach (var weather in Model)
+{
+    <p>
+        <div>Date: @weather.Date</div>
+        <div>Summary: @weather.Summary</div>
+        <div>Celcius: @weather.TemperatureC</div>
+        <div>Fahrenheit: @weather.TemperatureF</div>
+    </p>
+}

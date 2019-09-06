@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net.Http;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Newtonsoft.Json;
 
 namespace First.Web.Controllers
 {
@@ -67,7 +68,7 @@ namespace First.Web.Controllers
 
         public async Task<IActionResult> CallAPI()
         {
-            string responseBody = String.Empty;
+            IEnumerable<WeatherForecast> forecasts = null;
             HttpClient client = new HttpClient();
             try
             {
@@ -75,11 +76,10 @@ namespace First.Web.Controllers
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
                 HttpResponseMessage response = await client.GetAsync("http://localhost:7002/api/WeatherForecast");
                 response.EnsureSuccessStatusCode();
-                responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                forecasts = JsonConvert.DeserializeObject<IEnumerable<WeatherForecast>>(responseBody);
                 // Above three lines can be replaced with new helper method below
                 // responseBody = await client.GetStringAsync(uri);
-
-                Console.WriteLine(responseBody);
             }
             catch (HttpRequestException e)
             {
@@ -88,9 +88,7 @@ namespace First.Web.Controllers
                 return BadRequest(e.Message);
             }
 
-            ViewBag.data = responseBody;
-            return View();
-
+            return View(forecasts);
         }
 
         public IActionResult Error()

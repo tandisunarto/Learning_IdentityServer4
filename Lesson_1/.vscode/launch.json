@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/First.API/bin/Debug/netcoreapp2.0/First.API.dll",
+            "program": "${workspaceFolder}/First.API/bin/Debug/netcoreapp2.2/First.API.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

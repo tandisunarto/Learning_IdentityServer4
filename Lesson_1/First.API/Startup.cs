@@ -1,3 +1,5 @@
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +12,8 @@ namespace First.API
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();            
         }
 
         public IConfiguration Configuration { get; }
@@ -17,6 +21,13 @@ namespace First.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
+                    options.Authority = "http://localhost:7000";
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "custom-api";
+                });
+
             services.AddMvc();
         }
 
