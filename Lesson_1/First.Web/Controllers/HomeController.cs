@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net.Http;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace First.Web.Controllers
 {
@@ -61,6 +63,34 @@ namespace First.Web.Controllers
         public IActionResult ThankYou()
         {
             return View();
+        }
+
+        public async Task<IActionResult> CallAPI()
+        {
+            string responseBody = String.Empty;
+            HttpClient client = new HttpClient();
+            try
+            {
+                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+                HttpResponseMessage response = await client.GetAsync("http://localhost:7002/api/values");
+                response.EnsureSuccessStatusCode();
+                responseBody = await response.Content.ReadAsStringAsync();
+                // Above three lines can be replaced with new helper method below
+                // responseBody = await client.GetStringAsync(uri);
+
+                Console.WriteLine(responseBody);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return BadRequest(e.Message);
+            }
+
+            ViewBag.data = responseBody;
+            return View();
+
         }
 
         public IActionResult Error()

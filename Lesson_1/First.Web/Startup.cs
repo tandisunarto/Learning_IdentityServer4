@@ -42,6 +42,7 @@ namespace First.Web
 
                 options.Scope.Add("roles");
                 options.Scope.Add("health_data");
+                options.Scope.Add("custom-api");
 
                 options.ClaimActions.MapUniqueJsonKey("smoke", "smoke");
                 options.ClaimActions.MapUniqueJsonKey("alcohol", "alcohol");

@@ -34,27 +34,10 @@ namespace First.OAuth.Configurations
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
                             "health_data",
-                            "roles"
-                            // IdentityServerConstants.StandardScopes.Email,
-                            // "customAPI.read"
+                            "roles",
+                            "custom-api"
                         },
-                    },
-                    new Client
-                    {
-                        ClientId = "FirstAPI",
-                        ClientName = "First API Client Application",
-                        ClientSecrets = new List<Secret> {
-                            new Secret("FirstAPISecret".Sha256())},
-                        AllowedGrantTypes = GrantTypes. ResourceOwnerPasswordAndClientCredentials,
-                    //     AllowedScopes = new List<string> {
-                    //         // because scope "role" is an identity resource, when calling /connect/token must use grant_type = "password" and provide username and password
-                    //         // if scope only includes "customAPI.read" and "customAPI.write", when calling /connect/token use grant_type = "client_credentials" and no need
-                    //         // to provide username and password
-                    //         "role",
-                    //         "customAPI.read",
-                    //         "customAPI.write"
-                    //     }
-                    },
+                    }
                 };
             }
         }
@@ -64,25 +47,10 @@ namespace First.OAuth.Configurations
             get
             {
                 return new List<ApiResource> {
-                    new ApiResource
-                    {
-                        Name = "customAPI",
-                        DisplayName = "Custom API",
-                        Description = "Custom API Access",
-                        // UserClaims = new List<string> { "role" },
-                        // ApiSecrets = new List<Secret> { new Secret("ScopeSecret".Sha256())},
-                        // Scopes = new List<Scope>
-                        // {
-                        //     new Scope("customAPI.read"),
-                        //     new Scope("customAPI.write")
-                        //     {
-                        //         UserClaims = new List<string>
-                        //         {
-                        //             "employee_write"
-                        //         }
-                        //     }
-                        // }
-                    }
+                    new ApiResource(
+                        "custom-api",
+                        "Custom API"
+                    )
                 };
             }
         }
