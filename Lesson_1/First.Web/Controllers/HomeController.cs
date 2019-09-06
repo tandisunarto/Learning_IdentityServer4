@@ -73,7 +73,7 @@ namespace First.Web.Controllers
             {
                 var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
-                HttpResponseMessage response = await client.GetAsync("http://localhost:7002/api/values");
+                HttpResponseMessage response = await client.GetAsync("http://localhost:7002/api/WeatherForecast");
                 response.EnsureSuccessStatusCode();
                 responseBody = await response.Content.ReadAsStringAsync();
                 // Above three lines can be replaced with new helper method below
