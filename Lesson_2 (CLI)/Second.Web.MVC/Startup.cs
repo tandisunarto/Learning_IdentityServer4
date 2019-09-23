@@ -34,7 +34,7 @@ namespace Second.Web.App
 
             services.AddAuthorization(configure => {
                 configure.AddPolicy("Canadian",
-                policy => policy.RequireClaim(ClaimTypes.Country));
+                    policy => policy.RequireClaim(ClaimTypes.Country));
             });
 
             services.AddAuthentication(options =>
@@ -42,7 +42,10 @@ namespace Second.Web.App
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;  // "Cookies"
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;            // "OpenIdConnect"
             })
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+                // change access denied page route, default by convention is /Account/AccessDenied
+                options.AccessDeniedPath = "/Authorization/AccessDenied";
+            })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;

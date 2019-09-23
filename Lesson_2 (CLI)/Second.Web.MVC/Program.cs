@@ -20,7 +20,7 @@ namespace Second.Web.App
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:8010")
+                // .UseUrls("http://localhost:8010")
                 .Build();
     }
 }
