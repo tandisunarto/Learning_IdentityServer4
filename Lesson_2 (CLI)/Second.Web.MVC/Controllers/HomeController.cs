@@ -166,7 +166,7 @@ namespace Second.Web.App.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> Login()
+        public IActionResult Login()
         {
             return Challenge(new AuthenticationProperties
             {
