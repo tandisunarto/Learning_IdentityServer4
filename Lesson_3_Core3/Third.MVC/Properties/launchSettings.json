@@ -18,7 +18,7 @@
     "Third.MVC": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:8011;http://localhost:8010",
+      "applicationUrl": "http://localhost:8010",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

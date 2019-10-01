@@ -1,0 +1,30 @@
+@using Microsoft.AspNetCore.Authentication;
+
+@{
+    ViewData["Title"] = "Token & Claims";
+}
+
+<h3>Tokens</h3>
+<p>
+    <span>Id Token :</span>
+    <strong>@await ViewContext.HttpContext.GetTokenAsync("id_token")</strong>
+</p>
+
+<p>
+    <span>Access Token :</span>
+    <strong>@await ViewContext.HttpContext.GetTokenAsync("access_token")</strong>
+</p>
+
+<p>
+    <span>Refresh Token :</span>
+    <strong>@await ViewContext.HttpContext.GetTokenAsync("refresh_token")</strong>
+</p>
+
+@foreach(var claim in User.Claims)
+{
+    <div>
+        <span><strong>@claim.Type :</strong></span>
+        <span style="color: red">@claim.Value</span>
+    </div>
+}
+
