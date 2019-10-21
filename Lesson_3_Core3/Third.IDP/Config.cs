@@ -9,26 +9,23 @@ namespace Third.IDP
 {
     public static class Config
     {
-        public static IEnumerable<IdentityResource> GetIdentityResources()
-        {
-            return new IdentityResource[]
+        public static IEnumerable<IdentityResource> Ids =>
+            new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
             };
-        }
 
-        public static IEnumerable<ApiResource> GetApis()
-        {
-            return new ApiResource[]
+
+        public static IEnumerable<ApiResource> Apis =>
+            new ApiResource[]
             {
                 new ApiResource("api1", "My API #1")
             };
-        }
 
-        public static IEnumerable<Client> GetClients()
-        {
-            return new[]
+
+        public static IEnumerable<Client> Clients =>
+            new Client[]
             {
                 // client credentials flow client
                 new Client
@@ -42,14 +39,15 @@ namespace Third.IDP
                     AllowedScopes = { "api1" }
                 },
 
-                // MVC client using hybrid flow
+                // MVC client using code flow + pkce
                 new Client
                 {
                     ClientId = "mvc",
                     ClientName = "MVC Client",
 
-                    AllowedGrantTypes = GrantTypes.Hybrid,
-                    ClientSecrets = { new Secret("lesson_3".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequirePkce = true,
+                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
                     RedirectUris = { "http://localhost:8010/signin-oidc" },
                     FrontChannelLogoutUri = "http://localhost:8010/signout-oidc",
@@ -84,6 +82,5 @@ namespace Third.IDP
                     AllowedScopes = { "openid", "profile", "api1" }
                 }
             };
-        }
     }
 }
