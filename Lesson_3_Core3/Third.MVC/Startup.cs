@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+using static System.Console;
 
 namespace Third.MVC
 {
@@ -37,12 +40,23 @@ namespace Third.MVC
                 options.Authority = "http://localhost:8000";
                 options.RequireHttpsMetadata = false;
                 options.ClientId = "mvc";
-                options.ClientSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0";
-                options.ResponseType = "id_token code";
+                options.ClientSecret = "mvc-secret";
+                options.ResponseType = "code";
 
                 options.SaveTokens = true;
 
-                // options.Scope.Add("offline_access");
+                options.Scope.Add("offline_access");
+
+                options.Events = new OpenIdConnectEvents {
+                    OnRemoteFailure = ctx => {
+
+                        WriteLine(".....OnRemoteError");
+                        WriteLine(ctx);
+
+                        ctx.HandleResponse();
+                        return Task.FromResult(0);
+                    }
+                };
             });
         }
 

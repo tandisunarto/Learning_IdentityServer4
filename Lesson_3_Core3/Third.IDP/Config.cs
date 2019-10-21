@@ -45,9 +45,9 @@ namespace Third.IDP
                     ClientId = "mvc",
                     ClientName = "MVC Client",
 
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
-                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+                    ClientSecrets = { new Secret("mvc-secret".Sha256()) },
 
                     RedirectUris = { "http://localhost:8010/signin-oidc" },
                     FrontChannelLogoutUri = "http://localhost:8010/signout-oidc",
