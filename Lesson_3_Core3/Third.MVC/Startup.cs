@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,17 +42,24 @@ namespace Third.MVC
 
                 options.SaveTokens = true;
 
+                options.GetClaimsFromUserInfoEndpoint = true;
+
+                options.Scope.Add("address");
+                options.ClaimActions.MapUniqueJsonKey("address", "address");
+
                 options.Scope.Add("offline_access");
 
                 options.Events = new OpenIdConnectEvents {
                     OnRemoteFailure = ctx => {
-
                         WriteLine(".....OnRemoteError");
                         WriteLine(ctx);
 
                         ctx.HandleResponse();
                         return Task.FromResult(0);
-                    }
+                    },
+                    OnTokenValidated = ctx => {                        
+                        return Task.FromResult(0);
+                    }                    
                 };
             });
         }

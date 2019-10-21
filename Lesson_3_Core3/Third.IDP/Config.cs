@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityModel;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -14,6 +15,7 @@ namespace Third.IDP
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Address()
             };
 
 
@@ -54,7 +56,7 @@ namespace Third.IDP
                     PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    AllowedScopes = { "openid", "profile", "api1", "address" }
                 },
 
                 // SPA client using code flow + pkce
