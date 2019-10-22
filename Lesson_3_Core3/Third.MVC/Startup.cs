@@ -45,13 +45,16 @@ namespace Third.MVC
                 options.GetClaimsFromUserInfoEndpoint = true;
 
                 options.Scope.Add("address");
-                options.ClaimActions.MapUniqueJsonKey("address", "address");
+                options.ClaimActions.MapJsonKey("address", "address");
+                options.Scope.Add("security_info");
+                options.ClaimActions.MapJsonKey("sec_zone", "sec_zone");
+                options.ClaimActions.MapJsonKey("sec_exp", "sec_exp");
 
                 options.Scope.Add("offline_access");
 
                 options.Events = new OpenIdConnectEvents {
                     OnRemoteFailure = ctx => {
-                        WriteLine(".....OnRemoteError");
+                        WriteLine(".....OnRemoteFailure");
                         WriteLine(ctx);
 
                         ctx.HandleResponse();

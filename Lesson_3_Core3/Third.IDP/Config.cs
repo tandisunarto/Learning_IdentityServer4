@@ -15,7 +15,16 @@ namespace Third.IDP
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Address()
+                new IdentityResources.Address(),
+                new IdentityResource {
+                    Name = "security_info",
+                    DisplayName = "Security Info",
+                    UserClaims = {
+                        "sec_level",
+                        "sec_zone",
+                        "sec_exp"
+                    }
+                }
             };
 
 
@@ -56,7 +65,7 @@ namespace Third.IDP
                     PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "api1", "address" }
+                    AllowedScopes = { "openid", "profile", "api1", "address", "security_info" }
                 },
 
                 // SPA client using code flow + pkce
