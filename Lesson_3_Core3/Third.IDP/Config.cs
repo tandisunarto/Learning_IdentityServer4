@@ -27,13 +27,11 @@ namespace Third.IDP
                 }
             };
 
-
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
                 new ApiResource("api1", "My API #1")
             };
-
 
         public static IEnumerable<Client> Clients =>
             new Client[]
@@ -58,6 +56,7 @@ namespace Third.IDP
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
+                    AllowPlainTextPkce = false,
                     ClientSecrets = { new Secret("mvc-secret".Sha256()) },
 
                     RedirectUris = { "http://localhost:8010/signin-oidc" },

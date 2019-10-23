@@ -1,5 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -7,7 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using static System.Console;
 
 namespace Third.MVC
@@ -25,7 +28,7 @@ namespace Third.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            
+
             services.AddControllersWithViews();
 
             services.AddAuthentication(options => {
@@ -39,6 +42,7 @@ namespace Third.MVC
                 options.ClientId = "mvc";
                 options.ClientSecret = "mvc-secret";
                 options.ResponseType = "code";
+                options.UsePkce = true;
 
                 options.SaveTokens = true;
 
@@ -55,14 +59,61 @@ namespace Third.MVC
                 options.Events = new OpenIdConnectEvents {
                     OnRemoteFailure = ctx => {
                         WriteLine(".....OnRemoteFailure");
-                        WriteLine(ctx);
+                        WriteLine(ctx.Failure.Message);
 
                         ctx.HandleResponse();
                         return Task.FromResult(0);
                     },
-                    OnTokenValidated = ctx => {                        
-                        return Task.FromResult(0);
-                    }                    
+                    OnRedirectToIdentityProvider = ctx => {
+                        // only modify requests to the authorization endpoint
+                        if (ctx.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
+                        {
+                            // generate code_verifier
+                            var codeVerifier = CryptoRandom.CreateUniqueId(32);
+                        
+                            // store codeVerifier for later use
+                            if (ctx.Properties.Items.ContainsKey("code_verifier"))
+                                ctx.Properties.Items["code_verifier"] = codeVerifier;
+                            else
+                                ctx.Properties.Items.Add("code_verifier", codeVerifier);
+                        
+                            // create code_challenge
+                            string codeChallenge;
+                            using (var sha256 = SHA256.Create())
+                            {
+                                var challengeBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier));
+                                codeChallenge = Base64Url.Encode(challengeBytes);
+                            }
+                        
+                            // add code_challenge and code_challenge_method to request
+                            if (ctx.ProtocolMessage.Parameters.ContainsKey("code_challenge")) 
+                            {
+                                ctx.ProtocolMessage.Parameters["code_challenge"] = codeChallenge;
+                                ctx.ProtocolMessage.Parameters["code_challenge_method"] = "S256";
+                            }
+                            else 
+                            {
+                                ctx.ProtocolMessage.Parameters.Add("code_challenge", codeChallenge);
+                                ctx.ProtocolMessage.Parameters.Add("code_challenge_method", "S256");
+                            }
+                        }
+                        
+                        return Task.CompletedTask;
+                    },
+                    OnAuthorizationCodeReceived = ctx => {
+                        // only when authorization code is being swapped for tokens
+                        if (ctx.TokenEndpointRequest?.GrantType == OpenIdConnectGrantTypes.AuthorizationCode)
+                        {
+                            // get stored code_verifier
+                            if (ctx.Properties.Items.TryGetValue("code_verifier", out var codeVerifier))
+                            {
+                                // add code_verifier to token request
+                                ctx.TokenEndpointRequest.Parameters.Add("code_verifier", codeVerifier);
+                            }
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
         }
