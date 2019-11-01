@@ -63,6 +63,12 @@ namespace Third.IDP
                     FrontChannelLogoutUri = "http://localhost:8010/signout-oidc",
                     PostLogoutRedirectUris = { "http://localhost:8010/signout-callback-oidc" },
 
+                    // AlwaysIncludeUserClaimsInIdToken = true,
+                    // ***** 
+                    // with this option, we don't need "options.GetClaimsFromUserInfoEndpoint = true" in the client application
+                    // we just need to request the scope "options.Scope.Add("security_info")" and all claims in the scope will 
+                    // be returned with id_token
+
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "api1", "address", "security_info" }
                 },
