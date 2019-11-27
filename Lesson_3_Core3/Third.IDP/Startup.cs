@@ -71,8 +71,13 @@ namespace Third.IDP
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to http://localhost:5000/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
+                    options.ClientId = "714407290460-atfjn7hr1okqa2k2873tl8brr4k4jps9.apps.googleusercontent.com";
+                    options.ClientSecret = "P4QV9JsWcMN5Wc3jebIW-Sn0";
+                })
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = "564631641021266";
+                    facebookOptions.AppSecret = "0e1541f132d4dd7bdd80d20a279bd21e";
                 });
         }
 
