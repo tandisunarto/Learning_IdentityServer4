@@ -8,7 +8,7 @@ namespace Third.MVC
         public IActionResult Login()
         {
             return Challenge(new AuthenticationProperties{
-                RedirectUri = "/"
+                RedirectUri = "/home/tokens"
             },
             "oidc");
         }
@@ -16,7 +16,7 @@ namespace Third.MVC
         public IActionResult Logout()
         {
             return SignOut(new AuthenticationProperties {
-                RedirectUri = "/"
+                RedirectUri = "/home/privacy"
             },
             "oidc", "Cookies");
         }
