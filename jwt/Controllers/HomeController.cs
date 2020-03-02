@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using jwt.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace jwt.Controllers
 {
@@ -15,6 +16,7 @@ namespace jwt.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
