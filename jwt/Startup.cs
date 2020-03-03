@@ -45,26 +45,13 @@ namespace jwt
                 app.UseHsts();
             }
 
-            // app.UseHttpsRedirection();
             app.UseStaticFiles();
-            // app.UseCookiePolicy();
+            app.UseCookiePolicy();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            // app.UseMvc(routes =>
-            // {
-            //     routes.MapRoute(
-            //         name: "default",
-            //         template: "{controller=Home}/{action=Index}/{id?}");
-
-            //     routes.MapRoute(
-            //         name: "default api",
-            //         template: "api/{controller=Home}/{action=Index}/{id?}");
-            // });
-
 
             app.UseEndpoints(endpoint => {
                 endpoint.MapDefaultControllerRoute();
