@@ -28,7 +28,8 @@ namespace jwt.Controllers
             var claims = new List<Claim> {
                 new Claim(ClaimTypes.Name, "Tandi Sunarto"),
                 new Claim(ClaimTypes.Email, "tandi.sunarto@test.com"),
-                new Claim("Level", "14")
+                new Claim("Level", "14"),
+                new Claim("role", "superman")
             };
             var licenseClaims = new List<Claim> {
                 new Claim(ClaimTypes.Email, "tandi.sunarto@test.com"),
