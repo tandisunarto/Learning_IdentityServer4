@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+// using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,15 @@ namespace jwt.Controllers
     public class AuthController : Controller
     {
         private UserManager<IdentityUser> _userManager;
+        private SignInManager<IdentityUser> _signInManager;
 
         public AuthController(
-            UserManager<IdentityUser> userManager
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager
             )
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         public IActionResult Login()
         {
@@ -32,6 +36,7 @@ namespace jwt.Controllers
             var user = await _userManager.FindByNameAsync(model.Username);     
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                await _signInManager.SignInAsync(user, null);
                 var claims = new[] {
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -48,10 +53,10 @@ namespace jwt.Controllers
                     signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
                 );
 
-                return Ok(new {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
+                return View("Tokens", (
+                    new JwtSecurityTokenHandler().WriteToken(token),
+                    token.ValidTo
+                ));
             }
 
             return Unauthorized();
