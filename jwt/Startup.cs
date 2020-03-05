@@ -19,6 +19,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 
 namespace jwt
 {
@@ -45,9 +47,11 @@ namespace jwt
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
-                // .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => {
+                options.SignIn.RequireConfirmedEmail = true;
+            })
+            // .AddDefaultUI(UIFramework.Bootstrap4)
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // ******************************************************************************************************************************
             // to enable API to process token for authorization
@@ -72,6 +76,12 @@ namespace jwt
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            var mailKitOptions = Configuration.GetSection("Email").Get<MailKitOptions>();
+            services.AddMailKit(config => {
+                var options = new MailKitOptions();
+                config.UseMailKit(mailKitOptions);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
