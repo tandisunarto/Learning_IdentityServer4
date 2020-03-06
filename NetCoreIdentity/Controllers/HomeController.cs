@@ -4,9 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using jwt.Models;
+using NetCoreIdentity.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace jwt.Controllers
+namespace NetCoreIdentity.Controllers
 {
     public class HomeController : Controller
     {
@@ -16,6 +17,18 @@ namespace jwt.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Tokens()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult TokensWithPolicy()
         {
             return View();
         }

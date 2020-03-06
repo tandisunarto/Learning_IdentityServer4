@@ -1,6 +1,6 @@
 using System;
 
-namespace jwt.Models
+namespace NetCoreIdentity.Models
 {
     public class ErrorViewModel
     {

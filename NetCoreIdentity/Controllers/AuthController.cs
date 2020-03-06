@@ -1,6 +1,6 @@
 
 using System.Threading.Tasks;
-using jwt.Models;
+using NetCoreIdentity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NETCore.MailKit.Core;
@@ -21,13 +21,13 @@ public class AuthController : Controller
         _emailService = emailService;
     }
 
-  public IActionResult Login()
+    public IActionResult Login()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel model, string redirectUrl)
     {
         // username: tandi@live.com password: Password!1
         var user = await _userManager.FindByNameAsync(model.Username);

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using jwt.Data;
+using NetCoreIdentity.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 // using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,7 +22,7 @@ using Microsoft.Extensions.Hosting;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 
-namespace jwt
+namespace NetCoreIdentity
 {
     public class Startup
     {
@@ -36,12 +36,12 @@ namespace jwt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.Configure<CookiePolicyOptions>(options =>
-            // {
-            //     // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-            //     options.CheckConsentNeeded = context => true;
-            //     options.MinimumSameSitePolicy = SameSiteMode.None;
-            // });
+        //     services.Configure<CookiePolicyOptions>(options =>
+        //     {
+        //         // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+        //         options.CheckConsentNeeded = context => true;
+        //         options.MinimumSameSitePolicy = SameSiteMode.None;
+        //     });
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
@@ -52,29 +52,10 @@ namespace jwt
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // ******************************************************************************************************************************
-            // to enable API to process token for authorization
-            // ******************************************************************************************************************************
-            // services.AddAuthentication(options => {        
-            //     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            // })
-            // .AddJwtBearer(options => {
-            //     options.SaveToken = true;
-            //     options.RequireHttpsMetadata = false;
-            //     options.TokenValidationParameters = new TokenValidationParameters()
-            //     {
-            //         ValidateIssuer = true,
-            //         ValidateAudience = true,
-            //         ValidAudience = "http://halo.world.com",
-            //         ValidIssuer = "http://halo.world.com",
-            //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySuperSecretKey"))
-            //     };
-            // })
-            // .AddCookie("Cookies", options => {
-            //     options.Cookie.Name = "Scarlet.Cookie";
-            // });
+            // services.AddAuthentication("CookieAuth")
+            //     .AddCookie("CookieAuth", config => {
+            //         config.Cookie.Name = "Scarlet.Cookie";
+            //     });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -105,9 +86,10 @@ namespace jwt
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication();
-
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapDefaultControllerRoute();

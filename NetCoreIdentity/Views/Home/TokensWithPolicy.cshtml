@@ -1,0 +1,6 @@
+<h2>Tokens With Policy</h2>
+
+@foreach(var claim in Context.User.Claims) 
+{
+  <div>Claim: <span>@claim.Type </span> Value: <span>@claim.Value </span></div>
+}

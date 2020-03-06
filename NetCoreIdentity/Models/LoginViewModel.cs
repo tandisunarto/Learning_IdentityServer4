@@ -1,5 +1,5 @@
 
-namespace jwt.Models
+namespace NetCoreIdentity.Models
 {
     public class LoginViewModel
     {
