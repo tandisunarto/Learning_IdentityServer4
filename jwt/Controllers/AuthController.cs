@@ -64,35 +64,10 @@ namespace jwt.Controllers
                     ));
                 }
 
-                if (! await _userManager.IsEmailConfirmedAsync(user))
-                {
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var link = Url.Action(nameof(VerifyEmail), "Auth", new { userId = user.Id, code = code }); //, Request.Scheme, Request.Host);
-                    await _emailService.SendAsync("tandi@local.info", "Email Verification", $"<a href=\"{link}\">Verify Email</a>");
-
-                    return RedirectToAction("EmailVerification");
-                };
                 return View();
             }
 
             return Unauthorized();
-        }
-
-        public IActionResult EmailVerification ()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> VerifyEmail (string userId, string code)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null ) return BadRequest("Unable to verify your email !");
-
-            var confirmEmailResult = await _userManager.ConfirmEmailAsync(user, code);
-            if (confirmEmailResult.Succeeded)
-                return View();
-            
-            return BadRequest("Your email verification failed!");
         }
     }
 }
