@@ -4,7 +4,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-// using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using jwt.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 // using Microsoft.IdentityModel.Tokens;
 
 namespace jwt
@@ -21,10 +25,28 @@ namespace jwt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            });
+            services.AddIdentityCore<IdentityUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddAuthentication("CookieAuth")
             .AddCookie("CookieAuth", options => {
-                options.Cookie.Name = "Scarlet.Cookie";
+                options.Cookie.Name = "Super.Scarlet.Cookie";
                 options.LoginPath = "/Auth/Basic";
+            })
+            .AddJwtBearer(options => {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = "http://halo.world.com",
+                    ValidIssuer = "http://halo.world.com",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySuperSecretKey"))
+                };
             });
 
             services.AddControllersWithViews();
