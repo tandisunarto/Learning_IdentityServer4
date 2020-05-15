@@ -124,6 +124,7 @@ namespace Scarlet.Auth
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
 
