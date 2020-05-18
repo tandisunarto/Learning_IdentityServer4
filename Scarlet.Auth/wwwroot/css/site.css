@@ -104,3 +104,8 @@
     background-color: rgb(106, 165, 255);
     width: 200px;
 }
+.btn-microsoft {
+    background-color: #585a5a;
+    color: white;
+    width: 200px;  
+}

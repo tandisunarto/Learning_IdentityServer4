@@ -98,22 +98,27 @@ namespace Scarlet.Auth
             builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication()
+                .AddMicrosoftAccount(options =>
+                {
+                    options.ClientId = Configuration["Authentication:Microsoft:Id"];
+                    options.ClientSecret = Configuration["Authentication:Microsoft:Secret"];
+                })
                 .AddGoogle(options =>
                 {
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to http://localhost:5000/signin-google
-                    options.ClientId = "714407290460-atfjn7hr1okqa2k2873tl8brr4k4jps9.apps.googleusercontent.com";
-                    options.ClientSecret = "P4QV9JsWcMN5Wc3jebIW-Sn0";
+                    options.ClientId = Configuration["Authentication:Google:Id"];
+                    options.ClientSecret = Configuration["Authentication:Google:Secret"];
                 })
                 .AddFacebook(options =>
                 {
-                    options.AppId = "620834381843552";
-                    options.AppSecret = "56fff97d7ebfb6ffb13455d3124f6a57";
+                    options.AppId = Configuration["Authentication:Facebook:Id"];
+                    options.AppSecret = Configuration["Authentication:Facebook:Secret"];
                 })
                 .AddTwitter(options => {
-                    options.ConsumerKey = "Yreax1d7766ki2PCa02jodgdl";
-                    options.ConsumerSecret = "uVJ5LisrMf6raC5zo6B2MfDojmNjCIHTBYRZOCpQquQfYmrDVb";
+                    options.ConsumerKey = Configuration["Authentication:Twitter:Id"];
+                    options.ConsumerSecret = Configuration["Authentication:Twitter:Secret"];
                 });
         }
 
