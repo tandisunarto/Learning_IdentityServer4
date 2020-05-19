@@ -57,14 +57,17 @@
                             @foreach (var provider in Model.VisibleExternalProviders)
                             {
                                 <li>
-                                    <a class="btn btn-default mb-2 @("btn-" + provider.DisplayName.ToLower())"
-                                        asp-controller="External"
-                                        asp-action="Challenge"
-                                        asp-route-provider="@provider.AuthenticationScheme"
-                                        asp-route-returnUrl="@Model.ReturnUrl"
-                                    >
-                                        <i class="fab @("fa-"+provider.DisplayName.ToLower()) pr-2" aria-hidden="true"></i>@provider.DisplayName
-                                    </a>
+                                    <div class="btn-group mb-2" role="group">
+                                        <span class="btn btn-secondary @("btn-logo-" + provider.DisplayName.ToLower())"><i class="fab @("fa-"+provider.DisplayName.ToLower()) pr-2" aria-hidden="true"></i></span>
+                                        
+                                        <a class="btn btn-default @("btn-" + provider.DisplayName.ToLower())"
+                                            asp-controller="External"
+                                            asp-action="Challenge"
+                                            asp-route-provider="@provider.AuthenticationScheme"
+                                            asp-route-returnUrl="@Model.ReturnUrl">
+                                            @provider.DisplayName
+                                        </a>
+                                    </div>
                                 </li>
                             }
                         </ul>

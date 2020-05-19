@@ -95,17 +95,54 @@
     color: white;
     width: 200px;
 }
+.btn-facebook:hover {
+    background-color: rgb(74, 101, 190);
+    color: white;  
+}
+.btn-logo-facebook {
+    background-color: rgb(74, 101, 190);
+    color: white;
+    width: 40px;
+}
 .btn-google {
     background-color: rgb(148, 36, 36);
     color: white;
     width: 200px;
 }
+.btn-google:hover {
+    background-color: rgb(192, 59, 59);
+    color: white;
+}
+.btn-logo-google {
+    background-color: rgb(192, 59, 59);
+    color: white;
+    width: 40px;
+}
 .btn-twitter {
     background-color: rgb(106, 165, 255);
     width: 200px;
+    color: white;
+}
+.btn-twitter:hover {
+    background-color: rgb(168, 199, 245);
+    color: white;
+}
+.btn-logo-twitter {
+    background-color: rgb(168, 199, 245);
+    color: white;
+    width: 40px;
 }
 .btn-microsoft {
     background-color: #585a5a;
     color: white;
     width: 200px;  
+}
+.btn-microsoft:hover {
+    background-color: #959797;
+    color: white;
+}
+.btn-logo-microsoft {
+    background-color: #959797;
+    color: white;
+    width: 40px;  
 }
