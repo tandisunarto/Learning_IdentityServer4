@@ -7,8 +7,8 @@
   <ItemGroup>
     <PackageReference Include="IdentityExpress.Identity" Version="3.0.0" />
     <PackageReference Include="IdentityExpress.Manager.Api.Community" Version="3.0.0" />
-
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.4" />
 
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
