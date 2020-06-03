@@ -8,7 +8,7 @@ namespace App.MVC.Controllers
         public IActionResult Login()
         {
             return Challenge(new AuthenticationProperties {
-                RedirectUri = ""
+                RedirectUri = "/"
             },
             "oidc");
         }
