@@ -2,10 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using IdentityExpress.Identity;
-using IdentityExpress.Manager.Api;
-using IdentityServer4;
-using IdentityServer4.Configuration;
 using App.Auth.Data;
 using App.Auth.Models;
 using Microsoft.AspNetCore.Builder;
@@ -15,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
 
 namespace App.Auth
 {
@@ -26,8 +21,8 @@ namespace App.Auth
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
-            Configuration = configuration;
             Environment = environment;
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -49,48 +44,23 @@ namespace App.Auth
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("Users")));
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-            var connectionString = Configuration.GetConnectionString("Configuration");
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
+            
             var builder = services.AddIdentityServer(options =>
                 {
                     options.Events.RaiseErrorEvents = true;
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
-
-                    options.UserInteraction = new UserInteractionOptions
-                    {
-                        LogoutUrl = "/Account/Logout",
-                        LoginUrl = "/Account/Login",
-                        LoginReturnUrlParameter = "returnUrl"
-                    };
                 })
-                .AddAspNetIdentity<ApplicationUser>()
-                // this adds the config data from DB (clients, resources, CORS)
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = db =>
-                        db.UseSqlite(connectionString,
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                // this adds the operational data from DB (codes, tokens, consents)
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = db =>
-                        db.UseSqlite(connectionString,
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-
-                    // this enables automatic token cleanup. this is optional.
-                    options.EnableTokenCleanup = true;
-                    // options.TokenCleanupInterval = 15; // interval in seconds. 15 seconds useful for debugging
-                });
+                .AddInMemoryIdentityResources(Config.Ids)
+                .AddInMemoryApiResources(Config.Apis)
+                .AddInMemoryClients(Config.Clients)
+                .AddAspNetIdentity<ApplicationUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
@@ -108,9 +78,6 @@ namespace App.Auth
                     options.AppId = "2600433903540231";
                     options.AppSecret = "e64a7bc262991f8c1e9d30b3e0b3b886";
                 });
-
-            services.UseAdminUI();
-            services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -120,23 +87,16 @@ namespace App.Auth
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
 
-            app.UseHttpsRedirection();
-
-            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
-
-            app.UseAdminUI();
-
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }
