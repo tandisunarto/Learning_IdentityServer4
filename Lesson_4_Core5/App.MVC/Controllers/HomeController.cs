@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using App.MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace App.MVC.Controllers
 {
@@ -24,6 +25,12 @@ namespace App.MVC.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Tokens()
         {
             return View();
         }
