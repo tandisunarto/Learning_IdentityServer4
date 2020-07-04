@@ -49,7 +49,7 @@ namespace App.Auth
                 {
                     Log.Information("Seeding database...");
                     var config = host.Services.GetRequiredService<IConfiguration>();
-                    var connectionString = config.GetConnectionString("AuthConnection");
+                    var connectionString = config.GetConnectionString("IdentityServerConnection");
                     SeedData.EnsureSeedData(connectionString);
                     Log.Information("Done seeding database.");
                     return 0;

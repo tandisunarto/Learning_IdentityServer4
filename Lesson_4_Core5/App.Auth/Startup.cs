@@ -3,7 +3,6 @@
 
 
 using IdentityServer4;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,8 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using IdentityServerHost.Quickstart.UI;
-using App.Auth.Migrations;
-using App.Auth.Models.Identity;
 
 namespace App.Auth
 {
@@ -31,16 +28,7 @@ namespace App.Auth
         {
             services.AddControllersWithViews();
 
-            var authConnectionString = Configuration.GetConnectionString("AuthConnection");
-            var appConnectionString = Configuration.GetConnectionString("AppConnection");
-
-            services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlite(appConnectionString);
-            });
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            var connectionString = Configuration.GetConnectionString("IdentityServerConnection");
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -56,12 +44,12 @@ namespace App.Auth
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlite(authConnectionString);
+                    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
                 })
                 // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlite(authConnectionString);
+                    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
 
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
