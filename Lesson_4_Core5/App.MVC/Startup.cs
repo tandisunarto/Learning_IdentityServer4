@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +26,8 @@ namespace App.MVC
         {
             services.AddControllersWithViews();
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddAuthentication(options => {
                 options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
@@ -39,6 +42,7 @@ namespace App.MVC
                 options.ResponseType = "code";
 
                 options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
             });
         }
 
@@ -65,8 +69,7 @@ namespace App.MVC
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute()
-                    .RequireAuthorization();
+                endpoints.MapDefaultControllerRoute();
                 // endpoints.MapControllerRoute(
                 //     name: "default",
                 //     pattern: "{controller=Home}/{action=Index}/{id?}");
