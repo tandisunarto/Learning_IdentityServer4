@@ -38,10 +38,11 @@ namespace App.Auth
             try
             {
                 var seed = args.Contains("/seed");
+                var seedUser = args.Contains("/seeduser");
                 if (seed)
-                {
                     args = args.Except(new[] { "/seed" }).ToArray();
-                }
+                if (seedUser)
+                    args = args.Except(new[] { "/seeduser" }).ToArray();
 
                 var host = CreateHostBuilder(args).Build();
 
@@ -51,6 +52,15 @@ namespace App.Auth
                     var config = host.Services.GetRequiredService<IConfiguration>();
                     var connectionString = config.GetConnectionString("IdentityServerConnection");
                     SeedData.EnsureSeedData(connectionString);
+                    Log.Information("Done seeding database.");
+                    return 0;
+                }
+                if (seedUser)
+                {
+                    Log.Information("Seeding Identity database...");
+                    var config = host.Services.GetRequiredService<IConfiguration>();
+                    var connectionString = config.GetConnectionString("UserConnection");
+                    SeedDataUser.EnsureSeedData(connectionString);
                     Log.Information("Done seeding database.");
                     return 0;
                 }
