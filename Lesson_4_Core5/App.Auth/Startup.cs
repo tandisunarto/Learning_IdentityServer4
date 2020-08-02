@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using IdentityServerHost.Quickstart.UI;
 using App.Auth.Extensions;
+using App.Auth.Migrations.IdentityDb;
 
 namespace App.Auth
 {
@@ -30,6 +31,11 @@ namespace App.Auth
             services.AddControllersWithViews();
 
             var connectionString = Configuration.GetConnectionString("IdentityServerConnection");
+            var userConnectionString = Configuration.GetConnectionString("UserConnection");
+
+            services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlite(userConnectionString);
+            });
 
             var builder = services.SetupIdentityServer4(connectionString);
             

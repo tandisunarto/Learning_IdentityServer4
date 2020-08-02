@@ -45,7 +45,7 @@ namespace App.Auth
                             Email = "AliceSmith@email.com",
                             EmailConfirmed = true,
                         };
-                        var result = userMgr.CreateAsync(alice, "Pass123$").Result;
+                        var result = userMgr.CreateAsync(alice, "Password!1").Result;
                         if (!result.Succeeded)
                         {
                             throw new Exception(result.Errors.First().Description);
@@ -77,7 +77,7 @@ namespace App.Auth
                             Email = "BobSmith@email.com",
                             EmailConfirmed = true
                         };
-                        var result = userMgr.CreateAsync(bob, "Pass123$").Result;
+                        var result = userMgr.CreateAsync(bob, "Password!1").Result;
                         if (!result.Succeeded)
                         {
                             throw new Exception(result.Errors.First().Description);
