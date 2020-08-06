@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace App.Auth.Extensions
 {
-    public static class AppAuthIdentityServer4Extensions
+    public static class IdentityServer4Extension
     {
         public static IIdentityServerBuilder SetupIdentityServer4(
             this IServiceCollection services,
